@@ -23,13 +23,15 @@ List<PriceHistory> parsePriceHistory(String responseBody) {
 class PriceHistory {
   final int id;
   final double value;
+  final String date;
 
-  PriceHistory({ this.id, this.value});
+  PriceHistory({ this.id, this.value,this.date});
 
   factory PriceHistory.fromJson(Map<String, dynamic> json) {
     return PriceHistory(
       id: json['id'] as int,
       value: json['value'] as double,
+      date: json['date'] as String,
     );
   }
 }
@@ -39,7 +41,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Isolate Demo';
+    final appTitle = 'Grafico';
 
     return MaterialApp(
       title: appTitle,
@@ -80,14 +82,21 @@ class PriceHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+
+    return Scaffold(
+      body: ListView(
+        children: _crearListaCorta(),
       ),
-      itemCount: priceList.length,
-      itemBuilder: (context, index) {
-        return Text(priceList[index].value.toString());
-      },
     );
+  }
+
+  List<Widget> _crearListaCorta(){
+    var widgets = priceList.map((item){
+
+      return ListTile(
+        title: Text( item.id.toString() + " " + item.value.toString() + " " + item.date));
+    }).toList();
+
+    return widgets;
   }
 }
